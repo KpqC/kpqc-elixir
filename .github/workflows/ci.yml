@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            otp: "25"
+            elixir: "1.14"
+          - os: ubuntu-latest
+            otp: "29"
+            elixir: "1.20"
+          - os: macos-latest
+            otp: "29"
+            elixir: "1.20"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{ matrix.otp }}
+          elixir-version: ${{ matrix.elixir }}
+      - run: mix deps.get
+      - run: mix format --check-formatted
+      - run: MIX_ENV=test mix compile --warnings-as-errors
+      - run: mix test
+      - name: Build documentation
+        if: matrix.os == 'ubuntu-latest' && matrix.otp == '29'
+        run: mix docs --warnings-as-errors
+      - name: Build Hex package
+        if: matrix.os == 'ubuntu-latest' && matrix.otp == '29'
+        run: mix hex.build
+      - name: Check native symbol visibility
+        if: runner.os == 'Linux'
+        run: test "$(nm -D --defined-only _build/test/lib/kpqc/priv/kpqc_nif.so | awk '{print $3}')" = "nif_init"
+
+  known-answer-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: KpqC/kpqc-test-vectors
+          ref: 179dcc05ece2e22262cea1a61f3cdf1a5b08a304
+          path: kpqc-test-vectors
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: "29"
+          elixir-version: "1.20"
+      - run: mix deps.get
+      - name: Validate known-answer tests
+        env:
+          MIX_ENV: test
+          KPQC_TEST_ENTROPY: "1"
+          KPQC_TEST_VECTORS: ${{ github.workspace }}/kpqc-test-vectors
+        run: mix do clean + test

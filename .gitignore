@@ -1,0 +1,8 @@
+/_build/
+/deps/
+/doc/
+/kpqc-*.tar
+/kpqc-[0-9]*/
+/c_src/*.o
+/c_src/*.d
+/erl_crash.dump
