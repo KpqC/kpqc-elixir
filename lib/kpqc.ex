@@ -1,7 +1,7 @@
 defmodule KpqC do
   @moduledoc """
   Synchronous Elixir APIs for the KpqC post-quantum signature and
-  key-encapsulation algorithms.
+  key encapsulation mechanisms (KEMs).
 
   Cryptographic work runs on BEAM dirty CPU schedulers through a bundled NIF.
   """
@@ -173,7 +173,7 @@ defmodule KpqC do
   @spec signature_algorithms() :: [Algorithm.t()]
   def signature_algorithms, do: @signature_algorithms
 
-  @doc "Returns all supported key-encapsulation algorithms."
+  @doc "Returns all supported KEM algorithms."
   @spec kem_algorithms() :: [Algorithm.t()]
   def kem_algorithms, do: @kem_algorithms
 

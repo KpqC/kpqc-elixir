@@ -1,7 +1,8 @@
 # KpqC
 
-KpqC provides synchronous Elixir APIs for AIMer, HAETAE, NTRU+, and SMAUG-T.
-Native operations run on BEAM dirty CPU schedulers.
+KpqC provides synchronous Elixir APIs for the AIMer and HAETAE signature
+schemes and the NTRU+ and SMAUG-T key encapsulation mechanisms (KEMs). Native
+operations run on BEAM dirty CPU schedulers.
 
 ## Runtime support
 
@@ -30,8 +31,8 @@ does not download native libraries during compilation.
 | --- | --- | --- |
 | **AIMer** | Signature | `aimer128f/0`, `aimer128s/0`, `aimer192f/0`, `aimer192s/0`, `aimer256f/0`, `aimer256s/0` |
 | **HAETAE** | Signature | `haetae2/0`, `haetae3/0`, `haetae5/0` |
-| **NTRU+** | Key encapsulation | `ntruplus768/0`, `ntruplus864/0`, `ntruplus1152/0` |
-| **SMAUG&#8209;T** | Key encapsulation | `smaugt128/0`, `smaugt192/0`, `smaugt256/0`, `timer/0` |
+| **NTRU+** | KEM | `ntruplus768/0`, `ntruplus864/0`, `ntruplus1152/0` |
+| **SMAUG&#8209;T** | KEM | `smaugt128/0`, `smaugt192/0`, `smaugt256/0`, `timer/0` |
 
 ### Signatures
 
@@ -48,7 +49,10 @@ message = "release-manifest:v3"
 bytes. Verification fails if the supplied context differs from the signing
 context.
 
-### Key encapsulation
+### KEM
+
+A KEM creates a shared secret for a sender and a recipient. The public key may
+be distributed; the secret key and resulting shared secret must remain private.
 
 ```elixir
 algorithm = KpqC.smaugt192()
@@ -88,7 +92,7 @@ All sizes are in bytes.
 | `haetae3/0` | 1,472 | 2,112 | 2,349 |
 | `haetae5/0` | 2,080 | 2,752 | 2,948 |
 
-#### Key encapsulation
+#### KEM
 
 | Accessor | Public key | Secret key | Ciphertext | Shared secret |
 | --- | ---: | ---: | ---: | ---: |
