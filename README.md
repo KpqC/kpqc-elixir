@@ -111,7 +111,7 @@ mix test
 ```
 
 The optional known-answer suite validates all 1,600 records from the pinned
-[`kpqc-test-vectors` revision](https://github.com/KpqC/kpqc-test-vectors/tree/179dcc05ece2e22262cea1a61f3cdf1a5b08a304).
+[KpqC/kpqc-test-vectors at commit d75490bf824f](https://github.com/KpqC/kpqc-test-vectors/tree/d75490bf824faa4b148cd0b901a2eb13198fe0da).
 Its deterministic entropy hooks are only compiled into this explicit test
 build:
 
